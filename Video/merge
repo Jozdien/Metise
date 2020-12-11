@@ -1,0 +1,26 @@
+#!/bin/sh
+
+COMPRESSED_PATH='Compressed_Images/16x'
+ORIGINAL_PATH='Uncompressed_Images'
+OUTPUT_PATH='Test'
+
+IMAGE_COUNT=19
+
+mkdir -p $OUTPUT_PATH
+
+# Clear all residual files
+rm -f $OUTPUT_PATH/*
+
+for i in $(seq 1 $IMAGE_COUNT)
+do
+	printf "Merging $i "
+	convert $ORIGINAL_PATH/$i.png -resize 256x256\! $OUTPUT_PATH/${i}_oc.png
+	printf "."
+	convert $COMPRESSED_PATH/$i.png -resize 256x256\! $OUTPUT_PATH/${i}_cc.png
+	printf "."
+	convert $OUTPUT_PATH/${i}_oc.png $OUTPUT_PATH/${i}_cc.png +append $OUTPUT_PATH/$i.png
+	printf "."
+
+	rm $OUTPUT_PATH/${i}_oc.png $OUTPUT_PATH/${i}_cc.png
+	echo ". done"
+done

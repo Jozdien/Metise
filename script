@@ -1,0 +1,34 @@
+#!/bin/sh
+
+if [ $# != 1 ]; then
+	echo "usage: script filename"
+	exit 0
+fi
+
+FILE=$1
+FOLDER=${FILE}_temp
+
+mkdir -p $FOLDER
+
+fps=$(ffmpeg -i $FILE 2>&1 | sed -n "s/.*, \(.*\) fp.*/\1/p")
+frameformat=bmp
+format=yuv420p
+compress_factor=16
+
+echo "mp4 to Frames.."
+ffmpeg -i $FILE $FOLDER/frame%03d.$frameformat
+
+printf "Compressing"
+for img in $FOLDER/*; do
+	./compress.py $img $img $compress_factor
+	printf "."
+done
+echo "done!"
+
+echo "Frames to mp4.."
+ffmpeg -i $FOLDER/frame%03d.$frameformat -c:v libx264 -vf "fps=$fps,format=$format" out.mp4
+
+# rm -r $FOLDER
+
+fps_out=$(ffmpeg -i out.mp4 2>&1 | sed -n "s/.*, \(.*\) fp.*/\1/p")
+echo $fps - $fps_out

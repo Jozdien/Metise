@@ -1,0 +1,12 @@
+#!/bin/bash
+
+FOLDER='32x/Second_Run'
+
+frameformat=png
+format=yuv444p
+fps=15
+
+ffmpeg -i $FOLDER/%03d.$frameformat -c:v libx264 -vf "fps=$fps,format=$format" out.mp4
+
+fps_out=$(ffmpeg -i out.mp4 2>&1 | sed -n "s/.*, \(.*\) fp.*/\1/p")
+echo $fps - $fps_out
