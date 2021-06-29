@@ -6,7 +6,7 @@ Tensorflow implementation to learn a decompression mapping on images compressed 
 
 For example:
 
-![enter image description here](https://i.ibb.co/8Y5v4rQ/Figure-1.png)
+![Figure 1](https://imgur.com/Jpwz78i.png)
 
 If the differences look subtle, that's due to the fact that at full-scale, the compressed images (with a compression factor of 2.667) look more discrete, and pushing the factor even higher distorts it beyond visually lossless return.  It may, however, be possible with training on larger datasets for a longer period of time.
 
